@@ -90,7 +90,7 @@ def demo():
     # get glfw started
     glfwInit()
     width, height = (1000,600)
-    window = glfwCreateWindow(width, height, "NanoVG Demo", None, None)
+    window = glfwCreateWindow(width, height, "Python NanoVG Demo", None, None)
     glfwSetWindowPos(window,0,0)
 
     # Register callbacks window
@@ -146,7 +146,7 @@ def demo():
         vg.stroke()
 
         # test font rendering
-        txt = "Testing font rendering with Python NanoVG bindings."
+        txt = "Hello World - Python NanoVG bindings."
         # print vg.textBounds(0,0,txt)
         # print vg.textMetrics(1.)
         # print vg.textBreakLines(txt)
