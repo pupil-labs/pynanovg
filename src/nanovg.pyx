@@ -1,3 +1,4 @@
+
 # from __future__ import division
 cimport cnanovg as nvg
 
@@ -639,18 +640,18 @@ cdef class Context:
         '''
         nvg.nvgTextBox(self.ctx, x, y, breakRowWidth, txt, end)
 
-    # def textBounds(self, float x, float y, const char* txt, const char* end):
-    #     '''
-    #     Measures the specified multi-text string.
-    #     - (bounds) should be a pointer to float[4], if the bounding box of the text should be returned.
-    #     The bounds value are [xmin,ymin, xmax,ymax]
-    #     Measured values are returned in local coordinate space.
-    #     '''
-    #     cdef float bounds[4]
-    #     length = nvg.nvgTextBounds(self.ctx, x, y, txt, end, bounds)
-    #     return length,bounds[0],bounds[1],bounds[2],bounds[3]
+    def textBounds(self, float x, float y, const char* txt, const char* end=NULL):
+        '''
+        Measures the specified multi-text string.
+        - (bounds) should be a pointer to float[4], if the bounding box of the text should be returned.
+        The bounds value are [xmin,ymin, xmax,ymax]
+        Measured values are returned in local coordinate space.
+        '''
+        cdef float bounds[4]
+        length = nvg.nvgTextBounds(self.ctx, x, y, txt, end, bounds)
+        return length,bounds[0],bounds[1],bounds[2],bounds[3]
 
-    # def textGlyphPositions(self, float x, float y, const char* txt, const char* end, int maxPositions=0):
+    # def textGlyphPositions(self, float x, float y, const char* txt, const char* end=NULL, int maxPositions=0):
     #     '''
     #     Calculates the glyph x positions of the specified text.
     #     If end is specified only the sub-string will be used.
@@ -658,34 +659,34 @@ cdef class Context:
     #     '''
     #     cdef nvg.NVGglyphPosition* pos
     #     retval = nvg.nvgTextGlyphPositions(self.ctx, x, y, txt, end, pos, maxPositions)
-    #     return retval,pos.x,pos.minx,pos.maxx
+    #     return retval #,pos.x,pos.minx,pos.maxx
 
-    # def textMetrics(self, ascender=None,descender=None,lineh=None):
-    #     '''
-    #     Returns the vertical metrics based on the current text style.
-    #     Measured values are returned in local coordinate space.
+    def textMetrics(self, ascender=None,descender=None,lineh=None):
+        '''
+        Returns the vertical metrics based on the current text style.
+        Measured values are returned in local coordinate space.
 
-    #     it works but what does it do how is this supposted to be used?
-    #     '''
-    #     cdef float asc[1],dsc[1],lh[1]
-    #     if ascender: asc[0]=ascender
-    #     if descender: dsc[0]=descender
-    #     if lineh: lh[0]=lineh
-    #     nvg.nvgTextMetrics(self.ctx, asc,dsc,lh)
-    #     if ascender: return asc[0]
-    #     if descender: return dsc[0]
-    #     if lineh: return lh[0]
+        it works but what does it do how is this supposted to be used?
+        '''
+        cdef float asc[1],dsc[1],lh[1]
+        if ascender: asc[0]=ascender
+        if descender: dsc[0]=descender
+        if lineh: lh[0]=lineh
+        nvg.nvgTextMetrics(self.ctx, asc,dsc,lh)
+        if ascender: return asc[0]
+        if descender: return dsc[0]
+        if lineh: return lh[0]
 
 
-    # def textBreakLines(self, const char* txt, const char* end, float breakRowWidth, int maxRows):
-    #     '''
-    #     Breaks the specified text (txt) into lines.
-    #     If end is specified only the sub-string will be used.
-    #     White space is stripped at the beginning of the rows
-    #     the text is split at word boundaries or when new-line characters are encountered.
-    #     Words longer than the max width are split at nearest character (i.e. no hyphenation).
-    #     '''
-    #     cdef const char* c_end = NULL
-    #     cdef nvg.NVGtextRow* r
-    #     return <int>nvg.nvgTextBreakLines(self.ctx, txt, c_end, breakRowWidth, r, maxRows)
+    def textBreakLines(self, const char* txt, const char* end=NULL, float breakRowWidth=0, int maxRows=0):
+        '''
+        Breaks the specified text (txt) into lines.
+        If end is specified only the sub-string will be used.
+        White space is stripped at the beginning of the rows
+        the text is split at word boundaries or when new-line characters are encountered.
+        Words longer than the max width are split at nearest character (i.e. no hyphenation).
+        '''
+        cdef const char* c_end = NULL
+        cdef nvg.NVGtextRow* r
+        return <int>nvg.nvgTextBreakLines(self.ctx, txt, c_end, breakRowWidth, r, maxRows)
 

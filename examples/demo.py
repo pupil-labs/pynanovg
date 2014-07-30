@@ -115,16 +115,16 @@ def demo():
     glfwMakeContextCurrent(window)
 
     vg = nvg.Context()
-    roboto_light = vg.createFont("light", "../example/Roboto-Light.ttf")
-    roboto_regular = vg.createFont("regular", "../example/Roboto-Regular.ttf")
-    roboto_bold = vg.createFont("bold", "../example/Roboto-Bold.ttf")
+    roboto_light = vg.createFont("light", "../nanovg/example/Roboto-Light.ttf")
+    roboto_regular = vg.createFont("regular", "../nanovg/example/Roboto-Regular.ttf")
+    roboto_bold = vg.createFont("bold", "../nanovg/example/Roboto-Bold.ttf")
 
-    img = vg.createImage("../example/images/image2.jpg", 0)
+    img = vg.createImage("../nanovg/example/images/image2.jpg", 0)
 
     while not quit:
         clear_gl_screen()
         # show some nanovg graphics
-        
+
         vg.beginFrame(width, height, float(width)/float(height))
         draw_lines(0.,0.,100.)
 
@@ -140,7 +140,7 @@ def demo():
         vg.fillPaint(p)
         vg.fill()
 
-        rg = vg.linearGradient(500.0, 300.0, 100.0, 3000.0, nvg.colorRGBAf(0.0,0.0,0.0,0.0), nvg.colorRGBAf(0.,1.,0.2,0.5))
+        rg = vg.linearGradient(500.0, 300.0, 100.0, 200.0, nvg.colorRGBAf(0.0,0.0,0.0,0.0), nvg.colorRGBAf(0.,1.,0.2,0.5))
         vg.beginPath()
         vg.fillPaint(rg)
         vg.strokeColor(nvg.colorRGBAf(0.0,0.4,0.7,0.9))
@@ -151,6 +151,11 @@ def demo():
 
         # test font rendering
         txt = "Testing font rendering with Python NanoVG bindings."
+        print vg.textBounds(0,0,txt)
+        # print vg.textGlyphPositions(0,0,txt,maxPositions=10)
+        print vg.textMetrics(1.)
+        print vg.textBreakLines(txt)
+
         vg.fontFace("bold")
         vg.fontSize(24.0)
         vg.fillColor(nvg.colorRGBAf(0.,0.,0.,1.))
