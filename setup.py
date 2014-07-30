@@ -24,7 +24,10 @@ extensions = [
 				sources=["src/nanovg.pyx", 'nanovg/src/nanovg.c'],
 				include_dirs = includes,
 				libraries = libs,
-				extra_link_args=link_args),
+				extra_link_args=link_args,
+				#backend is hardcoded. also look at the pyd and pyx files. ToDo: make this smart.
+				# use any of the following: NANOVG_GL2_IMPLEMENTATION,NANOVG_GL3_IMPLEMENTATION,NANOVG_GLES2_IMPLEMENTATION,NANOVG_GLES3_IMPLEMENTATION
+				extra_compile_args=['-D NANOVG_GL2_IMPLEMENTATION',]),
 ]
 
 setup( 	name="nanovg",
