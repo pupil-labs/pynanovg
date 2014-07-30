@@ -1,9 +1,14 @@
 
+import cython
 # from __future__ import division
 cimport cnanovg as nvg
 
 # import numpy as np
-# cimport numpy as np
+cimport numpy as np
+import numpy as np
+DTYPE = np.float
+ctypedef np.float_t DTYPE_t
+
 
 def colorRGBAf(float r=0.0, float g=0.0, float b=0.0, float a=0.0):
     return nvg.nvgRGBAf(r,g,b,a)
@@ -651,14 +656,14 @@ cdef class Context:
         length = nvg.nvgTextBounds(self.ctx, x, y, txt, end, bounds)
         return length,bounds[0],bounds[1],bounds[2],bounds[3]
 
-    # def textGlyphPositions(self, float x, float y, const char* txt, const char* end=NULL, int maxPositions=0):
+    # def textGlyphPositions(self, float x, float y, const char* txt, const char* end=NULL, int ma0itions=0):
     #     '''
     #     Calculates the glyph x positions of the specified text.
     #     If end is specified only the sub-string will be used.
     #     Measured values are returned in local coordinate space.
     #     '''
     #     cdef nvg.NVGglyphPosition* pos
-    #     retval = nvg.nvgTextGlyphPositions(self.ctx, x, y, txt, end, pos, maxPositions)
+    #     retval = nvg.nvgTextGlyphPositions(self.ctx, x, y, txt, end, pos, ma0itions)
     #     return retval #,pos.x,pos.minx,pos.maxx
 
     def textMetrics(self, ascender=None,descender=None,lineh=None):
@@ -689,4 +694,40 @@ cdef class Context:
         cdef const char* c_end = NULL
         cdef nvg.NVGtextRow* r
         return <int>nvg.nvgTextBreakLines(self.ctx, txt, c_end, breakRowWidth, r, maxRows)
+
+    ### Wrapper functions
+    # below are functions that exsist to make drawing many things possible in Python
+
+    @cython.boundscheck(False) # turn of bounds-checking for entire function
+    def Circles(self,np.ndarray[DTYPE_t, ndim=2] positions,float r=10):
+        cdef Py_ssize_t n_points = positions.shape[0]
+        cdef Py_ssize_t n
+        if positions.shape[1] == 2:
+            for n in range(n_points):
+                nvg.nvgCircle(self.ctx, positions[n,0], positions[n,1], r)
+        else:
+            for n in range(n_points):
+                nvg.nvgCircle(self.ctx, positions[n,0], positions[n,1], positions[n,2])
+
+    @cython.boundscheck(False) # turn of bounds-checking for entire function
+    def Polyline(self, np.ndarray[DTYPE_t, ndim=2] polyline,float sw=1):
+        cdef Py_ssize_t n_segments = polyline.shape[0]
+        cdef Py_ssize_t n
+        self.strokeWidth(sw)
+        nvg.nvgBeginPath(self.ctx)
+        nvg.nvgMoveTo(self.ctx,polyline[0,0],polyline[0,1])
+        for n in range(1,n_segments):
+            nvg.nvgLineTo(self.ctx,polyline[n,0],polyline[n,1])
+
+    @cython.boundscheck(False) # turn of bounds-checking for entire function
+    def Polylines(self, np.ndarray[DTYPE_t, ndim=3] polyline,float sw=1):
+        cdef Py_ssize_t n_lines = polyline.shape[0]
+        cdef Py_ssize_t n_segments = polyline.shape[1]
+        cdef Py_ssize_t l,s
+        self.strokeWidth(sw)
+        for l in range(n_lines):
+            nvg.nvgBeginPath(self.ctx)
+            nvg.nvgMoveTo(self.ctx,polyline[l,0,0],polyline[l,0,1])
+            for s in range(1,n_segments):
+                nvg.nvgLineTo(self.ctx,polyline[l,s,0],polyline[l,s,1])
 

@@ -4,7 +4,7 @@ import OpenGL
 from OpenGL.GL import *
 
 import nanovg as nvg
-
+import numpy as np
 # create logger for the context of this function
 logger = logging.getLogger(__name__)
 
@@ -75,14 +75,14 @@ def demo():
 
 
     def draw_lines(x, y, w):
-        for i in range(60):
-            sw = (i+0.5)*.1
+        for i in range(1000):
+            sw = (i+0.05)*.1
             vg.strokeWidth(sw)
             vg.beginPath()
             vg.moveTo(x,y)
             vg.lineTo(x+1000.,y)
             vg.stroke()
-            y += 10.
+            y += 1.
 
     def draw_bezier():
         pass
@@ -104,10 +104,9 @@ def demo():
     glfwSetScrollCallback(window,on_scroll)
 
 
-    # glfwMakeContextCurrent(window)
     basic_gl_setup()
 
-    glfwSwapInterval(0)
+    # glfwSwapInterval(0)
     glfwMakeContextCurrent(window)
 
     vg = nvg.Context()
@@ -117,13 +116,15 @@ def demo():
 
     img = vg.createImage("../nanovg/example/images/image2.jpg", 0)
 
+    pos = np.arange(0,2000,.1,dtype=np.float)
+    pos = np.vstack((pos,pos+np.sin(pos)*50)).T
+    print pos.shape
     while not quit:
         clear_gl_screen()
         # show some nanovg graphics
 
         vg.beginFrame(width, height, float(width)/float(height))
-        draw_lines(0.,0.,100.)
-
+        # draw_lines(0.,0.,100.)
         # res = vg.textBounds(0.0, 0.0, "here is my text", "t")
         # vg.save()
         # draw rect
@@ -140,8 +141,15 @@ def demo():
         vg.beginPath()
         vg.fillPaint(rg)
         vg.strokeColor(nvg.colorRGBAf(0.0,0.4,0.7,0.9))
-        vg.strokeWidth(2.0)
-        vg.circle(500.0, 300., 80.0)
+        vg.strokeWidth(0.5)
+        if 0:
+            vg.beginPath()
+            vg.moveTo(0,0)
+            for x,y in pos:
+                vg.lineTo(x,y)
+        else:
+            vg.Polyline(pos)
+
         vg.fill()
         vg.stroke()
 

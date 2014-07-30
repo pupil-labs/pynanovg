@@ -1,12 +1,12 @@
 import os, platform
-# import numpy
+import numpy
 
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Build import cythonize
 
 if platform.system() == 'Darwin':
-	includes = ['/System/Library/Frameworks/OpenGL.framework/Versions/Current/Headers/'] # numpy.get_include() -- use this to build numpy headers
+	includes = ['/System/Library/Frameworks/OpenGL.framework/Versions/Current/Headers/',numpy.get_include()]
 	f = '-framework'
 	link_args = [f, 'OpenGL'] # f, 'Cocoa', f, 'IOKit', f, 'CoreVideo'
 	libs = []
