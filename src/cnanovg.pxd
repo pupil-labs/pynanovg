@@ -220,11 +220,14 @@ cdef extern from "../nanovg/src/nanovg.h":
 cdef extern from "../nanovg/src/nanovg_gl.h":
 
     # NVGcontext* nvgCreateGL3(int flags)
+    # void nvgDeleteGL3(NVGcontext* ctx)
+
     NVGcontext* nvgCreateGL2(int flags)
     void nvgDeleteGL2(NVGcontext* ctx)
+
     int NVG_ANTIALIAS = 1
     int NVG_STENCIL_STROKES = 2
-    int NANOVG_GL2_IMPLEMENTATION = 1
+
     ctypedef struct GLNVGcontext:
         pass
 
