@@ -232,5 +232,24 @@ cdef extern from "../nanovg/src/nanovg_gl.h":
         pass
 
 
+cdef extern from '../nanovg/example/perf.h':
+
+    cdef enum GraphrenderStyle:
+        GRAPH_RENDER_FPS
+        GRAPH_RENDER_MS
+
+    ctypedef struct PerfGraph:
+        pass
+
+    void initGraph(PerfGraph* fps, int style, const char* name)
+    void updateGraph(PerfGraph* fps, float frameTime)
+    void renderGraph(NVGcontext* vg, float x, float y, PerfGraph* fps)
+    float getGraphAverage(PerfGraph* fps)
 
 
+    cdef struct GPUtimer:
+        pass
+
+    void initGPUTimer(GPUtimer* timer)
+    void startGPUTimer(GPUtimer* timer)
+    int stopGPUTimer(GPUtimer* timer, float* times, int maxTimes)

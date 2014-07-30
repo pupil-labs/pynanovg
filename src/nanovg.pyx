@@ -731,3 +731,34 @@ cdef class Context:
             for s in range(1,n_segments):
                 nvg.nvgLineTo(self.ctx,polyline[l,s,0],polyline[l,s,1])
 
+
+    cdef class Graph:
+        cdef nvg.PerfGraph* fps_graph_p
+        cdef nvg.NVGcontext* ctx
+        def __cinit__(self,base_ctx, int style, const char* name):
+            self.ctx = base_ctx.ctx
+            self.fps_graph_p
+            nvg.initGraph(self.fps_graph_p,style,name)
+
+        def init(self,nvg.NVGcontext *ctx, int style, const char* name):
+            self._x = 0
+            self._y = 0
+
+        def __dealloc__(self):
+            pass
+
+        def update(self,float val):
+            nvg.updateGraph(self.fps_graph_p, val)
+
+        def render(self):
+            nvg.renderGraph(self.ctx,self._x,self._y,self.fps_graph_p)
+
+        property pos:
+            def __get__(self):
+                return self._x,self._y
+            def __set__(self,val):
+                self._x,self._y = val
+
+
+
+

@@ -116,8 +116,8 @@ def demo():
 
     img = vg.createImage("../nanovg/example/images/image2.jpg", 0)
 
-    pos = np.arange(0,2000,.1,dtype=np.float)
-    pos = np.vstack((pos,pos+np.sin(pos)*50)).T
+    pos = np.arange(0,2000,.5,dtype=np.float)
+    pos = np.vstack((pos,pos/2.+np.sin(pos)*20)).T
     print pos.shape
     while not quit:
         clear_gl_screen()
@@ -142,7 +142,7 @@ def demo():
         vg.fillPaint(rg)
         vg.strokeColor(nvg.colorRGBAf(0.0,0.4,0.7,0.9))
         vg.strokeWidth(0.5)
-        if 0:
+        if 1:
             vg.beginPath()
             vg.moveTo(0,0)
             for x,y in pos:
