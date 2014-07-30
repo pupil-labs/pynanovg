@@ -1,3 +1,5 @@
+cdef extern from 'gl.h':
+    pass
 
 cdef extern from "../nanovg/src/nanovg.h":
     ctypedef struct NVGcontext:
