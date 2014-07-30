@@ -32,10 +32,6 @@ def clear_gl_screen():
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT)
 
 
-
-
-
-
 def demo():
     global quit
     quit = False
@@ -151,10 +147,9 @@ def demo():
 
         # test font rendering
         txt = "Testing font rendering with Python NanoVG bindings."
-        print vg.textBounds(0,0,txt)
-        # print vg.textGlyphPositions(0,0,txt,maxPositions=10)
-        print vg.textMetrics(1.)
-        print vg.textBreakLines(txt)
+        # print vg.textBounds(0,0,txt)
+        # print vg.textMetrics(1.)
+        # print vg.textBreakLines(txt)
 
         vg.fontFace("bold")
         vg.fontSize(24.0)
