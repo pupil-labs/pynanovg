@@ -8,6 +8,7 @@ import numpy as np
 # create logger for the context of this function
 logger = logging.getLogger(__name__)
 
+import time
 
 def basic_gl_setup():
     glEnable( GL_POINT_SPRITE )
@@ -110,15 +111,29 @@ def demo():
     glfwMakeContextCurrent(window)
 
     vg = nvg.Context()
-    roboto_light = vg.createFont("light", "../nanovg/example/Roboto-Light.ttf")
-    roboto_regular = vg.createFont("regular", "../nanovg/example/Roboto-Regular.ttf")
-    roboto_bold = vg.createFont("bold", "../nanovg/example/Roboto-Bold.ttf")
+    vg.createFont("light", "../nanovg/example/Roboto-Light.ttf")
+    vg.createFont("regular", "../nanovg/example/Roboto-Regular.ttf")
+    vg.createFont("bold", "../nanovg/example/Roboto-Bold.ttf")
+    vg.createFont("sans", "../nanovg/example/Roboto-Regular.ttf")
 
     img = vg.createImage("../nanovg/example/images/image2.jpg", 0)
 
     pos = np.arange(0,2000,.5,dtype=np.float)
     pos = np.vstack((pos,pos/2.+np.sin(pos)*20)).T
     print pos.shape
+
+    fps = nvg.Graph(vg,0,"Rate")
+    fps.pos= (20,20)
+    cpu = nvg.Graph(vg,1,"Load")
+    cpu.pos = (240,20)
+    ts = time.time()
+
+    import os
+    import psutil
+
+    pid = os.getpid()
+    ps = psutil.Process(pid)
+
     while not quit:
         clear_gl_screen()
         # show some nanovg graphics
@@ -142,12 +157,13 @@ def demo():
         vg.fillPaint(rg)
         vg.strokeColor(nvg.colorRGBAf(0.0,0.4,0.7,0.9))
         vg.strokeWidth(0.5)
-        if 1:
+        if 0:
             vg.beginPath()
             vg.moveTo(0,0)
             for x,y in pos:
                 vg.lineTo(x,y)
         else:
+            # pass
             vg.Polyline(pos)
 
         vg.fill()
@@ -171,7 +187,16 @@ def demo():
         vg.fontFace("light")
         vg.fillColor(nvg.colorRGBAf(0.,1.,0.2,1.))
         vg.text(15.0, 70.0, txt)
+        # print random.random()
+        dt,ts = time.time()-ts,time.time()
+        # print dt
+        fps.update(dt)
+        fps.render()
 
+
+        pct = ps.get_cpu_percent()
+        cpu.update(pct/1000.)
+        cpu.render()
         vg.endFrame()
         vg.restore()
         glfwSwapBuffers(window)

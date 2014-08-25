@@ -239,7 +239,11 @@ cdef extern from '../nanovg/example/perf.h':
         GRAPH_RENDER_MS
 
     ctypedef struct PerfGraph:
-        pass
+        # pass
+        int style
+        char name[32]
+        float values[100]
+        int head
 
     void initGraph(PerfGraph* fps, int style, const char* name)
     void updateGraph(PerfGraph* fps, float frameTime)
