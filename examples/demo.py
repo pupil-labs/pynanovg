@@ -9,6 +9,9 @@ logger = logging.getLogger(__name__)
 
 import time
 
+width, height = (1000,600)
+
+
 def basic_gl_setup():
     glEnable( GL_POINT_SPRITE )
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE) # overwrite pointsize
@@ -44,6 +47,9 @@ def demo():
         # fb_size = denormalize(norm_size,glfwGetFramebufferSize(window))
         adjust_gl_view(w,h,window)
         glfwMakeContextCurrent(active_window)
+        global width
+        global height
+        width,height = w,h
 
     def on_iconify(window,iconfied):
         pass
@@ -89,7 +95,6 @@ def demo():
 
     # get glfw started
     glfwInit()
-    width, height = (1000,600)
     window = glfwCreateWindow(width, height, "Python NanoVG Demo", None, None)
     glfwSetWindowPos(window,0,0)
 
@@ -112,7 +117,7 @@ def demo():
     # vg = nanovg.Context()
     import nanovg
     nanovg.create_shared_context() # only needs to be called once per process.
-    from nanovg import vg, colorRGBAf
+    from nanovg import vg, colorRGBAf,GRAPH_RENDER_FPS,GRAPH_RENDER_PERCENT
     vg.createFont("light", "../nanovg/example/Roboto-Light.ttf")
     vg.createFont("regular", "../nanovg/example/Roboto-Regular.ttf")
     vg.createFont("bold", "../nanovg/example/Roboto-Bold.ttf")
@@ -120,13 +125,14 @@ def demo():
 
     img = vg.createImage("../nanovg/example/images/image2.jpg", 0)
 
-    pos = np.arange(0,2000,.5,dtype=np.float)
-    pos = np.vstack((pos,pos/2.+np.sin(pos)*20)).T
+    pos = np.arange(0,2000,.1,dtype=np.float)
+    print len(pos)
+    pos = np.vstack((pos*5,2*pos+(np.sin(pos)*100))).T
     print pos.shape
 
-    fps = nanovg.Graph(vg,0,"Framerate")
+    fps = nanovg.Graph(vg,GRAPH_RENDER_FPS,"Framerate")
     fps.pos= (20,20)
-    cpu = nanovg.Graph(vg,2,"CPU load of Process")
+    cpu = nanovg.Graph(vg,GRAPH_RENDER_PERCENT,"CPU load of Process")
     cpu.pos = (240,20)
     ts = time.time()
 
@@ -199,13 +205,13 @@ def demo():
 
         pct = ps.get_cpu_percent()
         # pct = psutil.cpu_percent()
-        print pct
         cpu.update(pct)
         cpu.render()
         vg.endFrame()
         vg.restore()
         glfwSwapBuffers(window)
         glfwPollEvents()
+        # time.sleep(.03)
 
     vg.reset()
     glfwDestroyWindow(window)

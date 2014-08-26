@@ -747,14 +747,16 @@ cdef class Context:
                 nvg.nvgLineTo(self.ctx,polyline[l,s,0],polyline[l,s,1])
 
 
-
+GRAPH_RENDER_FPS = 0
+GRAPH_RENDER_MS = 1
+GRAPH_RENDER_PERCENT = 2
 
 cdef class Graph:
     cdef nvg.PerfGraph fps_graph
     cdef nvg.PerfGraph* fps_graph_p
     cdef nvg.NVGcontext* ctx
     cdef int _x,_y
-    def __cinit__(self,Context base_ctx, int style, const char* name):
+    def __cinit__(self,Context base_ctx,int style, const char* name):
         self.ctx = base_ctx.ctx
         # we need to create the struct as the lib does not do it for us
         self.fps_graph
