@@ -237,12 +237,14 @@ cdef extern from '../nanovg/example/perf.h':
     cdef enum GraphrenderStyle:
         GRAPH_RENDER_FPS
         GRAPH_RENDER_MS
+        GRAPH_RENDER_PERCENT
+
 
     ctypedef struct PerfGraph:
         # pass
         int style
         char name[32]
-        float values[100]
+        float values[100] #do not change! This is set in perf.h and used in perf.c
         int head
 
     void initGraph(PerfGraph* fps, int style, const char* name)

@@ -10,6 +10,21 @@ DTYPE = np.float
 ctypedef np.float_t DTYPE_t
 
 
+
+
+# create a Context object that can be imported anyware.
+# This allows for use of one nanovg context in many submodules
+# within one process without having to pass along
+# a user created nanovg.Context
+# This is optional:
+# You can create the Context object yourself instead just as well.
+vg = None
+def create_shared_context():
+    global vg
+    if vg is None:
+        vg = Context()
+
+
 def colorRGBAf(float r=0.0, float g=0.0, float b=0.0, float a=0.0):
     return nvg.nvgRGBAf(r,g,b,a)
 
@@ -741,7 +756,9 @@ cdef class Graph:
     cdef int _x,_y
     def __cinit__(self,Context base_ctx, int style, const char* name):
         self.ctx = base_ctx.ctx
+        # we need to create the struct as the lib does not do it for us
         self.fps_graph
+        # set pointer to struct.
         self.fps_graph_p = &self.fps_graph
         nvg.initGraph(self.fps_graph_p,style,name)
 
@@ -763,7 +780,6 @@ cdef class Graph:
             return self._x,self._y
         def __set__(self,val):
             self._x,self._y = val
-
 
 
 

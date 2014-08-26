@@ -3,7 +3,6 @@ from glfw import *
 import OpenGL
 from OpenGL.GL import *
 
-import nanovg as nvg
 import numpy as np
 # create logger for the context of this function
 logger = logging.getLogger(__name__)
@@ -110,7 +109,10 @@ def demo():
     # glfwSwapInterval(0)
     glfwMakeContextCurrent(window)
 
-    vg = nvg.Context()
+    # vg = nanovg.Context()
+    import nanovg
+    nanovg.create_shared_context() # only needs to be called once per process.
+    from nanovg import vg, colorRGBAf
     vg.createFont("light", "../nanovg/example/Roboto-Light.ttf")
     vg.createFont("regular", "../nanovg/example/Roboto-Regular.ttf")
     vg.createFont("bold", "../nanovg/example/Roboto-Bold.ttf")
@@ -122,9 +124,9 @@ def demo():
     pos = np.vstack((pos,pos/2.+np.sin(pos)*20)).T
     print pos.shape
 
-    fps = nvg.Graph(vg,0,"Rate")
+    fps = nanovg.Graph(vg,0,"Framerate")
     fps.pos= (20,20)
-    cpu = nvg.Graph(vg,1,"Load")
+    cpu = nanovg.Graph(vg,2,"CPU load of Process")
     cpu.pos = (240,20)
     ts = time.time()
 
@@ -143,19 +145,19 @@ def demo():
         # res = vg.textBounds(0.0, 0.0, "here is my text", "t")
         # vg.save()
         # draw rect
-        p = vg.linearGradient(0.0, 0.0, 1000.0, 600.0, nvg.colorRGBAf(0.0,0.0,1.0,1.0), nvg.colorRGBAf(0.,1.,0.2,0.5))
-        # rg = vg.radialGradient(0.0, 0.0, 100.0, 120.0, nvg.colorRGBAf(0.0,0.0,1.0,1.0), nvg.colorRGBAf(0.,1.,0.2,0.5))
+        p = vg.linearGradient(0.0, 0.0, 1000.0, 600.0, colorRGBAf(0.0,0.0,1.0,1.0), colorRGBAf(0.,1.,0.2,0.5))
+        # rg = vg.radialGradient(0.0, 0.0, 100.0, 120.0, colorRGBAf(0.0,0.0,1.0,1.0), colorRGBAf(0.,1.,0.2,0.5))
         vg.beginPath()
-        # vg.fillColor(nvg.colorRGBAf(0.2,0.2,0.2,0.4))
+        # vg.fillColor(colorRGBAf(0.2,0.2,0.2,0.4))
         vg.roundedRect(10.0, 10.0, 490.0, 290.0, 5.0)
 
         vg.fillPaint(p)
         vg.fill()
 
-        rg = vg.linearGradient(500.0, 300.0, 100.0, 200.0, nvg.colorRGBAf(0.0,0.0,0.0,0.0), nvg.colorRGBAf(0.,1.,0.2,0.5))
+        rg = vg.linearGradient(500.0, 300.0, 100.0, 200.0, colorRGBAf(0.0,0.0,0.0,0.0), colorRGBAf(0.,1.,0.2,0.5))
         vg.beginPath()
         vg.fillPaint(rg)
-        vg.strokeColor(nvg.colorRGBAf(0.0,0.4,0.7,0.9))
+        vg.strokeColor(colorRGBAf(0.0,0.4,0.7,0.9))
         vg.strokeWidth(0.5)
         if 0:
             vg.beginPath()
@@ -168,7 +170,8 @@ def demo():
 
         vg.fill()
         vg.stroke()
-
+        import loaded_module
+        loaded_module.draw()
         # test font rendering
         txt = "Hello World - Python NanoVG bindings."
         # print vg.textBounds(0,0,txt)
@@ -177,15 +180,15 @@ def demo():
 
         vg.fontFace("bold")
         vg.fontSize(24.0)
-        vg.fillColor(nvg.colorRGBAf(0.,0.,0.,1.))
+        vg.fillColor(colorRGBAf(0.,0.,0.,1.))
         vg.text(15.0, 30.0, txt)
 
         vg.fontFace("regular")
-        vg.fillColor(nvg.colorRGBAf(1.,1.,1.,1.))
+        vg.fillColor(colorRGBAf(1.,1.,1.,1.))
         vg.text(15.0, 50.0, txt)
 
         vg.fontFace("light")
-        vg.fillColor(nvg.colorRGBAf(0.,1.,0.2,1.))
+        vg.fillColor(colorRGBAf(0.,1.,0.2,1.))
         vg.text(15.0, 70.0, txt)
         # print random.random()
         dt,ts = time.time()-ts,time.time()
@@ -195,7 +198,9 @@ def demo():
 
 
         pct = ps.get_cpu_percent()
-        cpu.update(pct/1000.)
+        # pct = psutil.cpu_percent()
+        print pct
+        cpu.update(pct)
         cpu.render()
         vg.endFrame()
         vg.restore()
