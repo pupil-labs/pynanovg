@@ -789,7 +789,9 @@ cdef class Ui:
         self.ctx = base_ctx.ctx
         # we need to create the struct as the lib does not do it for us
         nvg.miInit(self.ctx)
-        # self.panel_begin(0.0,0.0,100.0,100.0)
+
+    def __init__(self, Context base_ctx):
+        pass
 
     def __repr__(self):
         return "I am a GUI object"

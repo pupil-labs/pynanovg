@@ -367,7 +367,7 @@ cdef extern from '../milligui/src/milli2.h':
     void miTerminate()
 
     int miCreateFont(int face, const char* filename)
-    int miCreateIconImage(const char* name, const char* filename, float scale)
+    # int miCreateIconImage(const char* name, const char* filename, float scale)
 
 
     void miFrameBegin(int width, int height, MIinputState* input, float dt)
