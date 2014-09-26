@@ -8,7 +8,6 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 import time
-import gui
 
 width, height = (1000,600)
 
@@ -137,6 +136,8 @@ def demo():
     cpu.pos = (240,20)
     ts = time.time()
 
+    gui = nanovg.Ui(vg)
+
     import os
     import psutil
 
@@ -144,7 +145,6 @@ def demo():
     ps = psutil.Process(pid)
 
 
-    gui = nanovg.Gui(vg)
 
     while not quit:
         clear_gl_screen()

@@ -783,13 +783,13 @@ cdef class Graph:
         def __set__(self,val):
             self._x,self._y = val
 
-cdef class Gui:
+cdef class Ui:
     cdef nvg.NVGcontext* ctx
     def __cinit__(self,Context base_ctx):
         self.ctx = base_ctx.ctx
         # we need to create the struct as the lib does not do it for us
         nvg.miInit(self.ctx)
-
+        # self.panel_begin(0.0,0.0,100.0,100.0)
 
     def __repr__(self):
         return "I am a GUI object"
@@ -797,4 +797,9 @@ cdef class Gui:
     def __dealloc__(self):
         pass
 
+    def panel_begin(self, float x, float y, float w, float h):
+        nvg.miPanelBegin(x, y, w, h)
+
+    def panel_end(self):
+        nvg.miPanelEnd()
 

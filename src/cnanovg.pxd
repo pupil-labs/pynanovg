@@ -262,6 +262,7 @@ cdef extern from '../nanovg/example/perf.h':
 
 
 cdef extern from '../milligui/src/milli2.h':
+    
     cdef enum MImouseButton:
         MI_MOUSE_PRESSED    = 1 << 0
         MI_MOUSE_RELEASED   = 1 << 1
