@@ -61,7 +61,7 @@ def demo():
                 on_close(window)
 
     def on_char(window,char):
-        pass
+        gui.update_char(char)
 
     def on_button(window,button, action, mods):
         pos = glfwGetCursorPos(window)

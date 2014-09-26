@@ -812,6 +812,10 @@ cdef class GUI:
     def update_key(self, key):
         pass
 
+    def update_char(self, c):
+        self.inputState.keys[self.inputState.nkeys].code = c
+        self.inputState.nkeys += 1
+
     def frameBegin(self, int width, int height, float dt):
         nvg.miFrameBegin(width, height, self.inputState_p, dt)
 
