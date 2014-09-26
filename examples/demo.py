@@ -69,7 +69,8 @@ def demo():
         # pos = denormalize(pos,(frame.img.shape[1],frame.img.shape[0]) ) # Position in img pixels
 
     def on_pos(window,x, y):
-        pass
+        print "x: %s, y: %s" %(x,y)
+        gui.update_mouse_pos(float(x), float(y))
 
     def on_scroll(window,x,y):
         pass
@@ -136,14 +137,13 @@ def demo():
     cpu.pos = (240,20)
     ts = time.time()
 
-    gui = nanovg.Ui(vg)
+    gui = nanovg.GUI(vg)
 
     import os
     import psutil
 
     pid = os.getpid()
     ps = psutil.Process(pid)
-
 
 
     while not quit:
@@ -155,6 +155,9 @@ def demo():
         # res = vg.textBounds(0.0, 0.0, "here is my text", "t")
         # vg.save()
         # draw rect
+        _dt = 0
+        gui.frameBegin(width,height,_dt)
+
         p = vg.linearGradient(0.0, 0.0, 1000.0, 600.0, colorRGBAf(0.0,0.0,1.0,1.0), colorRGBAf(0.,1.,0.2,0.5))
         # rg = vg.radialGradient(0.0, 0.0, 100.0, 120.0, colorRGBAf(0.0,0.0,1.0,1.0), colorRGBAf(0.,1.,0.2,0.5))
         vg.beginPath()

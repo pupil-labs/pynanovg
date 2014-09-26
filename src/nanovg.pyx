@@ -783,11 +783,17 @@ cdef class Graph:
         def __set__(self,val):
             self._x,self._y = val
 
-cdef class Ui:
+
+cdef class GUI:
     cdef nvg.NVGcontext* ctx
+    cdef nvg.MIinputState inputState
+    cdef nvg.MIinputState* inputState_p
     def __cinit__(self,Context base_ctx):
         self.ctx = base_ctx.ctx
         # we need to create the struct as the lib does not do it for us
+        self.inputState
+        # set pointer to struct
+        self.inputState_p = &self.inputState
         nvg.miInit(self.ctx)
 
     def __init__(self, Context base_ctx):
@@ -798,6 +804,16 @@ cdef class Ui:
 
     def __dealloc__(self):
         pass
+
+    def update_mouse_pos(self, float x, float y):
+        self.inputState_p.mx = x
+        self.inputState_p.my = y
+
+    def update_key(self, key):
+        pass
+
+    def frameBegin(self, int width, int height, float dt):
+        nvg.miFrameBegin(width, height, self.inputState_p, dt)
 
     def panel_begin(self, float x, float y, float w, float h):
         nvg.miPanelBegin(x, y, w, h)
