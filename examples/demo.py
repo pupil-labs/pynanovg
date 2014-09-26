@@ -8,6 +8,7 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 import time
+import gui
 
 width, height = (1000,600)
 
@@ -142,6 +143,9 @@ def demo():
     pid = os.getpid()
     ps = psutil.Process(pid)
 
+
+    gui = nanovg.Gui(vg)
+
     while not quit:
         clear_gl_screen()
         # show some nanovg graphics
@@ -196,6 +200,8 @@ def demo():
         vg.fontFace("light")
         vg.fillColor(colorRGBAf(0.,1.,0.2,1.))
         vg.text(15.0, 70.0, txt)
+        
+
         # print random.random()
         dt,ts = time.time()-ts,time.time()
         # print dt

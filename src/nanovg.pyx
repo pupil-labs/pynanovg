@@ -783,8 +783,18 @@ cdef class Graph:
         def __set__(self,val):
             self._x,self._y = val
 
+cdef class Gui:
+    cdef nvg.NVGcontext* ctx
+    def __cinit__(self,Context base_ctx):
+        self.ctx = base_ctx.ctx
+        # we need to create the struct as the lib does not do it for us
+        nvg.miInit(self.ctx)
 
 
+    def __repr__(self):
+        return "I am a GUI object"
 
+    def __dealloc__(self):
+        pass
 
 
