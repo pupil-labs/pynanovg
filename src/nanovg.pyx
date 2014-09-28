@@ -749,7 +749,7 @@ cdef class Context:
 
 GRAPH_RENDER_FPS = 0
 GRAPH_RENDER_MS = 1
-GRAPH_RENDER_PERCENT = 2
+GRAPH_RENDER_PERCENT = 2x3
 
 cdef class Graph:
     cdef nvg.PerfGraph fps_graph

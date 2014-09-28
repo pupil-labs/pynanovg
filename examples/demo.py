@@ -121,15 +121,16 @@ def demo():
     vg.createFont("light", "../nanovg/example/Roboto-Light.ttf")
     vg.createFont("regular", "../nanovg/example/Roboto-Regular.ttf")
     vg.createFont("bold", "../nanovg/example/Roboto-Bold.ttf")
-    vg.createFont("sans", "../nanovg/example/Roboto-Regular.ttf")
 
     img = vg.createImage("../nanovg/example/images/image2.jpg", 0)
 
-    pos = np.arange(0,2000,.1,dtype=np.float)
+    pos = np.arange(0,10,.1,dtype=np.float)
     print len(pos)
     pos = np.vstack((pos*5,2*pos+(np.sin(pos)*100))).T
     print pos.shape
 
+    #used for the graphs
+    vg.createFont("sans", "../nanovg/example/Roboto-Regular.ttf")
     fps = nanovg.Graph(vg,GRAPH_RENDER_FPS,"Framerate")
     fps.pos= (20,20)
     cpu = nanovg.Graph(vg,GRAPH_RENDER_PERCENT,"CPU load of Process")
@@ -141,6 +142,8 @@ def demo():
 
     pid = os.getpid()
     ps = psutil.Process(pid)
+
+    import loaded_module
 
     while not quit:
         clear_gl_screen()
@@ -176,7 +179,6 @@ def demo():
 
         vg.fill()
         vg.stroke()
-        import loaded_module
         loaded_module.draw()
         # test font rendering
         txt = "Hello World - Python NanoVG bindings."
