@@ -2,7 +2,6 @@
 import cython
 # from __future__ import division
 cimport cnanovg as nvg
-
 # import numpy as np
 cimport numpy as np
 import numpy as np
@@ -782,9 +781,3 @@ cdef class Graph:
             return self._x,self._y
         def __set__(self,val):
             self._x,self._y = val
-
-
-
-
-
-
