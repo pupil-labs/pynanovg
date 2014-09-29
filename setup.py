@@ -21,7 +21,7 @@ nanovg_gl_path = 'nanovg/src/nanovg_gl2.c'
 
 extensions = [
 	Extension(	name="nanovg",
-				sources=["src/nanovg.pyx", 'nanovg/src/nanovg.c','nanovg/example/perf.c', 'milligui/src/milli2.c'],
+				sources=["src/nanovg.pyx", 'nanovg/src/nanovg.c','nanovg/example/perf.c'],
 				include_dirs = includes+["nanovg/src"], #the last one is needed to compile perf.h
 				libraries = libs,
 				extra_link_args=link_args,
